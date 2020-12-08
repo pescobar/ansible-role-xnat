@@ -1,2 +1,65 @@
 ---
 # tasks file for ansible-role-xnat
+
+- name: Create XNAT top folder
+  file:
+    path: "{{ xnat_top_folder }}"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+    state: directory
+    mode: 0755
+
+- name: Create main xnat folders
+  file:
+    path: "{{ xnat_top_folder }}/{{ item }}"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+    state: directory
+    mode: 0755
+  loop: "{{ xnat_sub_folders }}"
+
+- name: Copy the XNAT db config file
+  template:
+    src: xnat-conf.properties.j2
+    dest: "{{ xnat_top_folder }}/home/config/xnat-conf.properties"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+    mode: 0644
+
+- name: Download the XNAT war file to tomcat folder
+  get_url:
+    url: "https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads/xnat-web-{{ xnat_version }}.war"
+    dest: "{{ xnat_tomcat_webapps_path }}/ROOT.war"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+
+# - name: Download the xnat-pipeline-engine git repo
+#   git:
+#     repo: https://www.github.com/nrgXnat/xnat-pipeline-engine.git
+#     dest: "{{ xnat_top_folder }}/pipeline"
+#     version: "{{ xnat_version }}"
+#   become: yes
+#   become_user: "{{ xnat_user }}"
+
+- name: Download the xnat-pipeline-engine git repo
+  unarchive:
+    src: "https://github.com/NrgXnat/xnat-pipeline-engine/archive/{{ xnat_version }}.tar.gz"
+    dest: "{{ xnat_top_folder }}/pipeline/"
+    remote_src: yes
+    creates: "{{ xnat_top_folder }}/pipeline/gradlew"
+    extra_opts: [--strip-components=1]
+  become: yes
+  become_user: "{{ xnat_user }}"
+
+- name: Deploy the xnat-pipeline config file
+  template:
+    src: gradle.properties.j2
+    dest: "{{ xnat_top_folder }}/pipeline/gradle.properties"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+
+- name: Install the xnat-pipeline
+  shell: ./gradlew
+  args:
+    chdir: "{{ xnat_top_folder }}/pipeline"
+    creates: "{{ xnat_top_folder }}/pipeline/pipeline.config"
