@@ -1,29 +1,48 @@
 ansible-role-xnat
 =========
 
-Download XNAT and create the required folders
+Download XNAT files and create the required folders
 
-Requirements
-------------
-
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+**This role expects tomcat and postgres to be already configured**
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```
+xnat_version: 1.7.6
 
-Dependencies
-------------
+xnat_top_folder: /data/xnat
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+xnat_home_folder: "{{ xnat_top_folder }}/home"
 
-Example Playbook
-----------------
+xnat_sub_folders:
+  - archive
+  - build
+  - cache
+  - ftp
+  - home
+  - home/config
+  - home/logs
+  - home/plugins
+  - home/work
+  - inbox
+  - pipeline
+  - prearchive
 
-    - hosts: servers
-      roles:
-         - { role: ansible-role-xnat, var_name: 42 }
+xnat_user: tomcat
+xnat_group: tomcat
+
+xnat_db_name: xnat
+xnat_db_user: xnatdbuser
+xnat_db_pass: xnatdbpass
+
+xnat_tomcat_webapps_path: /opt/tomcat/webapps
+
+xnat_url: http://192.168.111.222:8080
+xnat_site_name: "XNAT"
+xnat_admin_email: admin@oldschool.edu
+xnat_smtp_server: mail.oldschool.edu
+```
 
 License
 -------
@@ -33,4 +52,4 @@ GPLv3
 Author Information
 ------------------
 
-Pablo Escobar
+Pablo Escobar Lopez
