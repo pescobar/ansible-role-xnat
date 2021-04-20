@@ -1,13 +1,9 @@
 #
 # xnat-conf.properties
-# XNAT http://www.xnat.org
-# Copyright (c) 2016, Washington University School of Medicine
-# All Rights Reserved
 #
-# Released under the Simplified BSD.
-#
+
 datasource.driver=org.postgresql.Driver
-datasource.url=jdbc:postgresql://localhost/{{ xnat_db_name }}
+datasource.url=jdbc:postgresql://{{ xnat_db_host }}/{{ xnat_db_name }}
 datasource.username={{ xnat_db_user }}
 datasource.password={{ xnat_db_pass }}
 
@@ -15,4 +11,8 @@ hibernate.dialect=org.hibernate.dialect.PostgreSQL9Dialect
 hibernate.hbm2ddl.auto=update
 hibernate.show_sql=false
 hibernate.cache.use_second_level_cache=true
+hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
 hibernate.cache.use_query_cache=true
+
+spring.http.multipart.max-file-size=1073741824
+spring.http.multipart.max-request-size=1073741824
