@@ -1,0 +1,13 @@
+exclude_paths:
+  - ./meta/exception.yml
+  - ./meta/preferences.yml
+  - ./molecule/default/prepare.yml
+  - ./molecule/default/converge.yml
+  - ./molecule/default/verify.yml
+  - ./molecule/default/collections.yml
+  - ./molecule/vagrant/prepare.yml
+  - ./molecule/vagrant/converge.yml
+  - ./molecule/vagrant/verify.yml
+  - ./molecule/vagrant/collections.yml
+  - ./.tox
+  - ./.cache
