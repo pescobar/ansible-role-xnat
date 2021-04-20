@@ -1,7 +1,12 @@
 ---
 # defaults file for ansible-role-xnat
 
-xnat_version: 1.7.6
+# check available versions in https://bitbucket.org/xnatdev/xnat-web/downloads/
+xnat_version: "1.8.1"
+xnat_war_file_download_url: "https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads/xnat-web-{{ xnat_version }}.war"
+# To download the war file form your private web server override {{ xnat_war_file_download_url }}. e.g.
+# xnat_docker_war_file_download_url: "https://yourserver.com/xnat-war-files/xnat-web-{{ xnat_version }}.war"
+
 
 xnat_top_folder: /data/xnat
 
@@ -24,6 +29,7 @@ xnat_sub_folders:
 xnat_user: tomcat
 xnat_group: tomcat
 
+xnat_db_host: localhost
 xnat_db_name: xnat
 xnat_db_user: xnatdbuser
 xnat_db_pass: xnatdbpass

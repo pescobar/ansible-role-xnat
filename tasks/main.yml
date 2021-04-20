@@ -28,7 +28,7 @@
 
 - name: Download the XNAT war file to tomcat folder
   get_url:
-    url: "https://api.bitbucket.org/2.0/repositories/xnatdev/xnat-web/downloads/xnat-web-{{ xnat_version }}.war"
+    url: "{{ xnat_war_file_download_url }}"
     dest: "{{ xnat_tomcat_webapps_path }}/ROOT.war"
     owner: "{{ xnat_user }}"
     group: "{{ xnat_group }}"
