@@ -1,7 +1,8 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include role ansible-role-xnat"
-      include_role:
-        name: ansible-role-xnat
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ansible-role-xnat
