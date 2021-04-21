@@ -36,7 +36,8 @@ xnat_db_pass: xnatdbpass
 
 xnat_tomcat_webapps_path: /opt/tomcat/webapps
 
-xnat_url: http://192.168.111.222:8080
+xnat_domain: 192.168.111.222
+xnat_url: http://{{ xnat_domain }}:8080
 xnat_site_name: "XNAT"
 xnat_admin_email: admin@oldschool.edu
 xnat_smtp_server: mail.oldschool.edu
