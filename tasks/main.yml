@@ -25,6 +25,8 @@
     group: "{{ xnat_group }}"
     state: directory
     mode: 0755
+  become: yes
+  become_user: "{{ xnat_user }}"
   loop: "{{ xnat_sub_folders }}"
 
 - name: Copy the XNAT config file
@@ -34,6 +36,8 @@
     owner: "{{ xnat_user }}"
     group: "{{ xnat_group }}"
     mode: 0644
+  become: yes
+  become_user: "{{ xnat_user }}"
 
 - name: Download the XNAT war file to tomcat folder
   get_url:
@@ -59,9 +63,13 @@
     owner: "{{ xnat_user }}"
     group: "{{ xnat_group }}"
     mode: 0644
+  become: yes
+  become_user: "{{ xnat_user }}"
 
 - name: Install the xnat-pipeline
   command: ./gradlew
   args:
     chdir: "{{ xnat_top_folder }}/pipeline"
     creates: "{{ xnat_top_folder }}/pipeline/pipeline.config"
+  become: yes
+  become_user: "{{ xnat_user }}"
