@@ -56,6 +56,16 @@
     owner: "{{ xnat_user }}"
     group: "{{ xnat_group }}"
 
+- name: Download the XNAT plugins (if defined)
+  ansible.builtin.get_url:
+    url: "{{ item }}"
+    dest: "{{ xnat_top_folder }}/home/plugins/"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+  become: yes
+  become_user: "{{ xnat_user }}"
+  when: xnat_plugins_to_download | length > 0
+
 - name: Download the xnat-pipeline-engine git repo
   unarchive:
     src: "{{ xnat_pipeline_engine_download_url }}"

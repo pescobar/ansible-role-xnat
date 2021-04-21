@@ -47,3 +47,6 @@ xnat_site_description: "XNAT site description"
 xnat_admin_email: admin@oldschool.edu
 xnat_smtp_server: mail.oldschool.edu
 xnat_smtp_port: 25
+
+# list of urls with jar files to download to the plugins/ folder
+xnat_plugins_to_download: []
