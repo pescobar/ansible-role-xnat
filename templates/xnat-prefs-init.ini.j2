@@ -1,0 +1,21 @@
+[siteConfig]
+siteId={{ xnat_site_name }}
+siteDescription={{ xnat_site_description }}
+adminEmail={{ xnat_admin_email }}
+archivePath={{ xnat_top_folder }}/archive
+cachePath={{ xnat_top_folder }}/cache
+prearchivePath={{ xnat_top_folder }}/prearchive
+ftpPath={{ xnat_top_folder }}/ftp
+buildPath={{ xnat_top_folder }}/build
+pipelinePath={{ xnat_top_folder }}/pipeline
+inboxPath={{ xnat_top_folder }}/inbox
+
+{% if xnat_smtp_server != 'mail.oldschool.edu' %}
+[notifications]
+smtpEnabled=true
+smtpHostname={{ xnat_smtp_server }}
+smtpPort={{ xnat_smtp_port }}
+#smtpUsername=$XNAT_SMTP_USERNAME
+#smtpPassword=$XNAT_SMTP_PASSWORD
+#smtpAuth=$XNAT_SMTP_AUTH
+{% endif %}

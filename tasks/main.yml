@@ -39,6 +39,16 @@
   become: yes
   become_user: "{{ xnat_user }}"
 
+- name: Copy the XNAT prefs-init.ini config file
+  template:
+    src: xnat-prefs-init.ini.j2
+    dest: "{{ xnat_top_folder }}/home/config/prefs-init.ini"
+    owner: "{{ xnat_user }}"
+    group: "{{ xnat_group }}"
+    mode: 0644
+  become: yes
+  become_user: "{{ xnat_user }}"
+
 - name: Download the XNAT war file to tomcat folder
   get_url:
     url: "{{ xnat_war_file_download_url }}"
