@@ -48,7 +48,7 @@
 
 - name: Download the xnat-pipeline-engine git repo
   unarchive:
-    src: "https://github.com/NrgXnat/xnat-pipeline-engine/archive/{{ xnat_version }}.tar.gz"
+    src: "{{ xnat_pipeline_engine_download_url }}"
     dest: "{{ xnat_top_folder }}/pipeline/"
     remote_src: yes
     creates: "{{ xnat_top_folder }}/pipeline/gradlew"
@@ -65,6 +65,60 @@
     mode: 0644
   become: yes
   become_user: "{{ xnat_user }}"
+
+- name: Modify the gradle config files to use a internal proxy
+  block:
+
+    - name: Replace url "http://maven.imagej.net/content/groups/public" by our proxy url
+      ansible.builtin.replace:
+        path: "{{ xnat_top_folder }}/pipeline/build.gradle"
+        regexp: 'http\:\/\/maven.imagej.net\/content\/groups\/public'
+        replace: "{{ xnat_gradle_proxy_url }}"
+      become: yes
+      become_user: "{{ xnat_user }}"
+
+    - name: Replace url "https://nrgxnat.jfrog.io/nrgxnat/libs-release" by our proxy url
+      ansible.builtin.replace:
+        path: "{{ xnat_top_folder }}/pipeline/build.gradle"
+        regexp: 'https\:\/\/nrgxnat.jfrog.io\/nrgxnat\/libs-release'
+        replace: "{{ xnat_gradle_proxy_url }}"
+      become: yes
+      become_user: "{{ xnat_user }}"
+
+    - name: Replace url "https://nrgxnat.jfrog.io/nrgxnat/libs-snapshot" by our proxy url
+      ansible.builtin.replace:
+        path: "{{ xnat_top_folder }}/pipeline/build.gradle"
+        regexp: 'https\:\/\/nrgxnat.jfrog.io\/nrgxnat\/libs-snapshot'
+        replace: "{{ xnat_gradle_proxy_url }}"
+      become: yes
+      become_user: "{{ xnat_user }}"
+
+    - name: Replace url "https://nrgxnat.jfrog.io/nrgxnat/libs-snapshot" by our proxy url
+      ansible.builtin.replace:
+        path: "{{ xnat_top_folder }}/pipeline/gradle/wrapper/gradle-wrapper.properties"
+        regexp: 'https\\:\/\/services.gradle.org\/distributions'
+        replace: "{{ xnat_gradle_proxy_url }}"
+      become: yes
+      become_user: "{{ xnat_user }}"
+
+    - name: Edit settings.gradle to user our proxy
+      ansible.builtin.blockinfile:
+        path: "{{ xnat_top_folder }}/pipeline/settings.gradle"
+        marker: "/* {mark} ANSIBLE MANAGED BLOCK */"
+        insertbefore: 'rootProject.name'
+        block: |
+          pluginManagement {
+              repositories {
+                  maven {
+                      url '{{ xnat_gradle_proxy_url }}'
+                  }
+              }
+          }
+      become: yes
+      become_user: "{{ xnat_user }}"
+
+  when: xnat_gradle_proxy_url is defined | default('false')
+
 
 - name: Install the xnat-pipeline
   command: ./gradlew
